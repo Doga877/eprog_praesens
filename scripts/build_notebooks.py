@@ -79,6 +79,10 @@ Zuerst laden wir die Bibliotheken. `numpy` rechnet mit Arrays, `matplotlib`
 zeichnet Diagramme, `sklearn` liefert Hilfsmittel und das neuronale Netz.
 """),
         code("""
+import importlib.util
+if importlib.util.find_spec("sklearn") is None:
+    %pip install -q scikit-learn
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -380,7 +384,6 @@ zweiten Teil starten können.
         code("""
 # Checkpoint: Daten laden, aufteilen und standardisieren
 daten = Datensatz("bace.csv")
-namen = daten.namen
 
 _X_rest, X_test, _y_rest, y_test = train_test_split(
     daten.X, daten.y, test_size=0.20, random_state=42, stratify=daten.y
@@ -733,7 +736,7 @@ def teste_molekuel(mw, alogp, hba, hbd, rb, name="Neues Molekül"):
 
     unter = roh[0] < X_train.min(axis=0)
     ueber = roh[0] > X_train.max(axis=0)
-    ausserhalb = [namen[i] for i in range(len(namen)) if unter[i] or ueber[i]]
+    ausserhalb = [daten.namen[i] for i in range(len(daten.namen)) if unter[i] or ueber[i]]
     hinweis = f"  [ausserhalb Trainingsbereich: {', '.join(ausserhalb)}]" if ausserhalb else ""
 
     print(f"{name:<18} {antwort:<24} ({sicherheit:>3.0%}){hinweis}")
